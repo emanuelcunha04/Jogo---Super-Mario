@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+        body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+#game-area {
+        width: 400px;
+        height: 300px;
+        border: 1px solid black;
+        position: relative;
+        overflow: hidden;
+        background-image: url('https://img.freepik.com/vetores-premium/fundo-pixelado_634779-89.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+
+ #player {
+        width: 50px;
+        height: 70px;
+        background-image: url('https://supermariorun.com/assets/img/stage/mario03.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        position: absolute;
+        top: 10;
+        transform: translateY(-115%);
+        animation: movePlayer 4s infinite linear; /* Duplicado o tempo da animação para compensar o movimento duplicado */
+      }
+      
+      #obstacle {
+        width: 80px; /* Ajuste a largura do obstáculo conforme necessário */
+        height: 80px; /* Ajuste a altura do obstáculo conforme necessário */
+        background-image: url(https://luizfelipe9627-super-mario.netlify.app/assets/image/pipe-game.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: absolute;
+        left: 400px; /* Ajuste a posição do obstáculo conforme necessário */
+        top: 200px; /* Ajuste a posição do obstáculo conforme necessário */
+        z-index: 2;
+      }
+
+      @keyframes movePlayer {
+        0% {
+          left: 0;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      @keyframes movePlayer {
+        0% {
+          left: 0;
+        }
+        50% {
+          left: 200px; /* Ajuste o valor para metade da largura da área de jogo */
+        }
+        100% {
+          left: 400px; /* Ajuste o valor para a largura da área de jogo */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game-area">
+      <div id="player"></div>
+      <div class="platform" style="top: 250px; left: 50px;"></div>
+      <div class="platform" style="top: 200px; left: 200px;"></div>
+      <div class="platform" style="top: 150px; left: 100px;"></div>
+    </div>
+
+    <script>
+      // Obtém as referências dos elementos do jogo
+      const player = document.getElementById("player");
+      const gameArea = document.getElementById("game-area");
+
+      // Define as propriedades do jogador
+      const playerWidth = 30;
+      const playerHeight = 30;
+      let playerX = 0;
+      let playerY = 0;
+      let isJumping = false;
+      let jumpSpeed = 0;
+
+      // Define as propriedades do jogo
+      const gravity = 0.5;
+
+      // Função para atualizar a posição do jogador
+      function updatePlayer() {
+        // Atualiza a posição vertical do jogador de acordo com a gravidade
+        playerY += jumpSpeed;
+        jumpSpeed += gravity;
+
+        // Verifica se o jogador colide com o chão
+        if (playerY > gameArea.clientHeight - playerHeight) {
+          playerY = gameArea.clientHeight - playerHeight;
+          isJumping = false;
+        }
+
+        // Atualiza a posição do jogador no DOM
+        player.style.left = playerX + "px";
+        player.style.top = playerY + "px";
+
+        // Chama a função updatePlayer a cada frame
+        requestAnimationFrame(updatePlayer);
+      }
+
+      // Função para lidar com os eventos de teclado
+      function handleKeyDown(event) {
+        // Verifica se a tecla pressionada é a seta para cima e o jogador não está pulando
+        if (event.key === "ArrowUp" && !isJumping) {
+          isJumping = true;
+          jumpSpeed = -10;
+        }
+      }
+
+      // Adiciona o evento de teclado para lidar com as teclas pressionadas
+      document.addEventListener("keydown", handleKeyDown);
+
+      // Inicia o jogo chamando a função updatePlayer
+      updatePlayer();
+    </script>
+  </body>
+</html>
